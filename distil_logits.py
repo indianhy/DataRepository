@@ -163,6 +163,9 @@ class LogitsTrainer(SFTTrainer):
 
 # Training arguments
 training_arguments = TrainingArguments(**config["training"])
+training_arguments.max_seq_length=config["tokenizer"]["max_length"]
+training_arguments.dataset_text_field="text"
+
 
 # Create the custom SFT Trainer
 trainer = LogitsTrainer(
@@ -171,8 +174,6 @@ trainer = LogitsTrainer(
     eval_dataset=tokenized_dataset["test"],
     tokenizer=student_tokenizer,
     args=training_arguments,
-    max_seq_length=config["tokenizer"]["max_length"],
-    dataset_text_field="text",
 )
 
 # Add the teacher model to the trainer
